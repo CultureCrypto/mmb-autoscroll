@@ -1,0 +1,37 @@
+# mmb-autoscroll tunables — copied to /etc/mmb-autoscroll.conf by install.sh.
+# Edit the live file then: sudo systemctl restart mmb-autoscroll
+# (systemd EnvironmentFile syntax: KEY=VALUE, no quotes needed, no export.)
+
+# Feel: "rate" = Windows autoscroll (speed grows with distance, keeps
+# scrolling while held even if still). "position" = libinput on-button
+# (scrolls only while actively moving).
+MMB_MODE=rate
+
+# Pointer travel (device counts) from the press point before scrolling
+# starts. Also the click-vs-scroll line: stay inside it and the press is
+# delivered as a normal middle-click (paste still works). Raise if a quick
+# middle-click sometimes scrolls; lower for a more sensitive anchor.
+MMB_DEADZONE=18
+
+# rate mode curve:  notches/sec = MMB_GAIN * (counts_beyond_deadzone ^ MMB_EXPONENT)
+# Raise MMB_GAIN to scroll faster overall; MMB_EXPONENT shapes the ramp.
+MMB_GAIN=0.020
+MMB_EXPONENT=1.30
+MMB_MAX_SPEED=40
+MMB_TICK_MS=15
+
+# position mode: notches emitted per count of motion while held.
+MMB_POSITION_FACTOR=0.06
+
+# 1 = also scroll horizontally (4-way). 0 = vertical only.
+MMB_HORIZONTAL=1
+
+# Flip a direction if it feels backwards.
+MMB_INVERT_V=0
+MMB_INVERT_H=0
+
+# Device selection (usually leave as-is). MMB_MATCH_NAME is a Python regex
+# matched against the device name; default catches mice but not the dock's
+# phantom pointer. MMB_DEVICE pins one explicit /dev/input/eventN if needed.
+MMB_MATCH_NAME=(?i)mouse
+# MMB_DEVICE=/dev/input/event9

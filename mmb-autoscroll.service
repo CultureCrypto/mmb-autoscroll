@@ -1,0 +1,32 @@
+[Unit]
+Description=mmb-autoscroll — Windows-style middle-button autoscroll (evdev grab -> uinput)
+Documentation=https://wayland.freedesktop.org/libinput/doc/latest/scrolling.html
+After=systemd-udevd.service
+Wants=systemd-udevd.service
+
+[Service]
+Type=simple
+# Tunables live here (optional file; "-" = ignore if missing). Edit it and
+# `systemctl restart mmb-autoscroll` to retune without touching the unit.
+EnvironmentFile=-/etc/mmb-autoscroll.conf
+ExecStart=/usr/local/bin/mmb-autoscroll
+Restart=always
+RestartSec=2
+# Don't give up if the mouse isn't present yet at boot (keeps restarting).
+StartLimitIntervalSec=0
+
+# --- hardening -----------------------------------------------------------
+# Needs only the input subsystem + the uinput node; deny everything else.
+DevicePolicy=closed
+DeviceAllow=/dev/uinput rw
+DeviceAllow=char-input rw
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectControlGroups=true
+ProtectKernelTunables=true
+RestrictAddressFamilies=AF_UNIX
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
