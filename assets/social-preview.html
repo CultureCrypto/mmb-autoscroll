@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+      }
+      .card {
+        width: 1280px;
+        height: 640px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 56px;
+        padding: 70px 80px;
+        background:
+          radial-gradient(
+            520px 520px at 300px 320px,
+            rgba(34, 197, 94, 0.18),
+            transparent 70%
+          ),
+          linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        font-family:
+          "Inter", "Segoe UI", system-ui, "DejaVu Sans", sans-serif;
+        color: #f0f6fc;
+      }
+
+      /* --- illustration --- */
+      .art {
+        flex: 0 0 360px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* --- text column --- */
+      .col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+      }
+      .name {
+        font-family:
+          "JetBrains Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+        font-size: 72px;
+        font-weight: 800;
+        letter-spacing: -2px;
+        line-height: 1;
+        margin: 0 0 22px;
+      }
+      .name .accent {
+        color: #22c55e;
+      }
+      .tag {
+        font-size: 33px;
+        font-weight: 600;
+        line-height: 1.25;
+        color: #e6edf3;
+        margin: 0 0 26px;
+      }
+      .tag b {
+        color: #22c55e;
+        font-weight: 700;
+      }
+      .gesture {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 22px;
+        color: #8b949e;
+        margin-bottom: 30px;
+      }
+      .gesture .k {
+        color: #c9d1d9;
+        font-weight: 600;
+      }
+      .gesture .arrow {
+        color: #22c55e;
+        font-size: 26px;
+      }
+      .pills {
+        display: flex;
+        gap: 12px;
+      }
+      .pill {
+        font-size: 20px;
+        font-weight: 600;
+        color: #adbac7;
+        background: rgba(177, 186, 196, 0.08);
+        border: 1px solid rgba(177, 186, 196, 0.18);
+        border-radius: 999px;
+        padding: 8px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="art">
+        <svg width="340" height="380" viewBox="0 0 340 380" fill="none">
+          <!-- mouse body -->
+          <rect
+            x="70"
+            y="40"
+            width="150"
+            height="270"
+            rx="75"
+            fill="#161b22"
+            stroke="#c9d1d9"
+            stroke-width="6"
+          />
+          <!-- left / right button split -->
+          <path
+            d="M145 46 V150 M70 150 H220"
+            stroke="#c9d1d9"
+            stroke-width="4"
+            opacity="0.5"
+          />
+          <!-- middle scroll wheel (highlighted) -->
+          <rect
+            x="134"
+            y="62"
+            width="22"
+            height="56"
+            rx="11"
+            fill="#22c55e"
+          />
+          <rect
+            x="134"
+            y="62"
+            width="22"
+            height="56"
+            rx="11"
+            fill="none"
+            stroke="#22c55e"
+            stroke-width="10"
+            opacity="0.25"
+          />
+
+          <!-- autoscroll anchor + acceleration chevrons -->
+          <g
+            stroke="#22c55e"
+            stroke-width="9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          >
+            <path d="M250 95 l22 -22 l22 22" opacity="0.55" />
+            <path d="M250 130 l22 -22 l22 22" opacity="0.85" />
+            <path d="M250 255 l22 22 l22 -22" opacity="0.85" />
+            <path d="M250 290 l22 22 l22 -22" opacity="0.55" />
+          </g>
+          <circle cx="272" cy="190" r="13" fill="#22c55e" />
+          <circle
+            cx="272"
+            cy="190"
+            r="24"
+            fill="none"
+            stroke="#22c55e"
+            stroke-width="4"
+            opacity="0.4"
+          />
+        </svg>
+      </div>
+
+      <div class="col">
+        <h1 class="name">mmb<span class="accent">-</span>autoscroll</h1>
+        <div class="tag">
+          Windows-style <b>middle-button autoscroll</b><br />for GNOME /
+          Wayland
+        </div>
+        <div class="gesture">
+          <span class="k">hold&nbsp;middle&nbsp;button</span>
+          <span class="arrow">→</span>
+          <span class="k">move</span>
+          <span class="arrow">→</span>
+          <span class="k">scroll</span>
+        </div>
+        <div class="pills">
+          <span class="pill">Linux</span>
+          <span class="pill">Wayland</span>
+          <span class="pill">evdev → uinput</span>
+          <span class="pill">no X11 needed</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
