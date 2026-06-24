@@ -76,7 +76,16 @@ threshold — is configurable.
 
 ## Install
 
+> New to the terminal? Open one with **Ctrl+Alt+T**, then paste these
+> commands one block at a time. `sudo` means "run as administrator" — it
+> will ask for your login password (the typing stays invisible; that's
+> normal).
+
 ```bash
+# 0. download the code into your home folder (~/mmb-autoscroll)
+git clone https://github.com/CultureCrypto/mmb-autoscroll.git
+cd mmb-autoscroll
+
 # 1. dependency
 sudo apt install -y python3-evdev        # Debian/Ubuntu; use your distro's pkg
 
@@ -90,6 +99,47 @@ sudo MMB_GAIN=0.020 python3 ./mmb_autoscroll.py
 # 4. once it feels right, install as a service
 sudo ./install.sh                         # copies binary + unit + default config
 sudo systemctl enable --now mmb-autoscroll   # enable at boot
+```
+
+## Where everything lives (for newcomers)
+
+There are **two copies** to keep straight:
+
+- **The folder you cloned** (e.g. `~/mmb-autoscroll`) is the *source*. Running
+  `./install.sh` from here copies the program into the system. Editing files in
+  this folder does **nothing** to the running app until you re-run
+  `sudo ./install.sh`. You can keep this folder (handy for updates) or delete
+  it after installing — the installed copies below are independent.
+- **The installed copies**, placed system-wide by `sudo ./install.sh`:
+
+  | What it is | Where it goes | Notes |
+  | --- | --- | --- |
+  | The program | `/usr/local/bin/mmb-autoscroll` | where Linux keeps locally-installed programs |
+  | The service definition | `/etc/systemd/system/mmb-autoscroll.service` | tells the system to run it (and start it at boot) |
+  | **Your settings** | `/etc/mmb-autoscroll.conf` | the file you edit to change speed/direction/etc. |
+  | Logs | *(no file)* — `journalctl -u mmb-autoscroll` | runtime messages, kept by the system journal |
+
+  `/usr/local/bin` and `/etc` are standard system locations, so they need
+  `sudo` to change — that's why install/uninstall use it.
+
+### Everyday commands
+
+```bash
+systemctl status mmb-autoscroll            # is it running? (q to quit)
+sudo systemctl restart mmb-autoscroll      # apply changes to /etc/mmb-autoscroll.conf
+sudo systemctl stop mmb-autoscroll         # turn it off for now
+sudo systemctl start mmb-autoscroll        # turn it back on
+sudo systemctl disable mmb-autoscroll      # stop it launching at boot
+journalctl -u mmb-autoscroll -b            # see this boot's log messages
+```
+
+### Updating to a newer version
+
+```bash
+cd ~/mmb-autoscroll        # the folder you cloned
+git pull                   # fetch the latest code
+sudo ./install.sh          # copy it into place (keeps your /etc/mmb-autoscroll.conf)
+sudo systemctl restart mmb-autoscroll
 ```
 
 ## Configure / tune
@@ -153,3 +203,7 @@ and device reports welcome.
 - If the service fails with a device-access error, comment out the
   `DevicePolicy=` / `DeviceAllow=` lines in the unit and `systemctl
   daemon-reload` (some setups need looser device sandboxing).
+
+## License
+
+[MIT](LICENSE) — do whatever you like; no warranty.
