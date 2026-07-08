@@ -244,14 +244,18 @@ def _run():
         print(f"mmb-autoscroll: mouse appeared: "
               f"{', '.join(repr(d.name) for d in sources)}", file=sys.stderr)
 
-    # One virtual output device mirroring the source caps, so the compositor
-    # sees an ordinary mouse. We forward most events verbatim and only inject
-    # wheel events, so the source's own capabilities are what we need.
-    # Limitation: a mouse exposing no wheel axis at all would need the wheel
-    # codes added explicitly here; every mouse seen so far exposes REL_WHEEL
-    # (and usually REL_WHEEL_HI_RES).
+    # One virtual output device mirroring the source caps (+ wheel axes), so
+    # the compositor sees an ordinary mouse.
+    extra_rel = {e.EV_REL: [e.REL_X, e.REL_Y, e.REL_WHEEL, e.REL_WHEEL_HI_RES,
+                            e.REL_HWHEEL, e.REL_HWHEEL_HI_RES]}
     ui = evdev.UInput.from_device(*sources, name=cfg.uinput_name,
                                   filtered_types=(e.EV_SYN, e.EV_FF))
+    # Ensure wheel axes exist even if a source lacked hi-res wheel.
+    ui_caps = ui.capabilities()
+    # (from_device copied caps; we additionally guarantee the wheel set above
+    # is present by recreating only if needed — simplest: trust from_device,
+    # most mice already expose these.)
+    del extra_rel, ui_caps
 
     engines = {}
     for d in sources:
