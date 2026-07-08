@@ -229,12 +229,20 @@ def _run():
                 d.close()
         return found
 
+    # Wait quietly for a matching mouse instead of exit-and-restart: the old
+    # exit(1) + systemd Restart=always/2s ground out ~37k restarts (and as many
+    # journal lines) during one mouse-less day (observed 2026-07-07). One line
+    # on entering the wait, one on success, silence in between.
     sources = discover()
     if not sources:
         print("mmb-autoscroll: no matching mouse found "
-              f"(match_name={cfg.match_name!r}); exiting for systemd restart.",
+              f"(match_name={cfg.match_name!r}); waiting (poll 10s, quiet)...",
               file=sys.stderr)
-        sys.exit(1)
+        while not sources:
+            time.sleep(10)
+            sources = discover()
+        print(f"mmb-autoscroll: mouse appeared: "
+              f"{', '.join(repr(d.name) for d in sources)}", file=sys.stderr)
 
     # One virtual output device mirroring the source caps, so the compositor
     # sees an ordinary mouse. We forward most events verbatim and only inject
