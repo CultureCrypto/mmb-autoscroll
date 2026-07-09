@@ -3,6 +3,11 @@ Description=mmb-autoscroll — Windows-style middle-button autoscroll (evdev gra
 Documentation=https://wayland.freedesktop.org/libinput/doc/latest/scrolling.html
 After=systemd-udevd.service
 Wants=systemd-udevd.service
+# Rate-limit directives belong in [Unit] (systemd ignores them in [Service],
+# which is why the old unit logged an "Unknown key name" warning every start).
+# With the wait-for-mouse fix the process no longer exit-loops, but keep the
+# limit off so a genuine crash can't ever trip a start-limit lockout.
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
@@ -12,8 +17,6 @@ EnvironmentFile=-/etc/mmb-autoscroll.conf
 ExecStart=/usr/local/bin/mmb-autoscroll
 Restart=always
 RestartSec=2
-# Don't give up if the mouse isn't present yet at boot (keeps restarting).
-StartLimitIntervalSec=0
 
 # --- hardening -----------------------------------------------------------
 # Needs only the input subsystem + the uinput node; deny everything else.
